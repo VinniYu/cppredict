@@ -23,7 +23,7 @@ ModelFactory handles instantiation of model type
 */
 class ModelFactory {
     static unique_ptr<Model> create(const string& type) {
-
+        if (type == "linear") return make_unique<LinReg>();
     }
 };
 
