@@ -19,60 +19,22 @@ bool animate = false;
 void glutDisplay()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  ImGui_ImplGLUT_NewFrame();
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui::NewFrame();
+
+  // where drawing happens
+  glClearColor(1.0, 0.0, 0.0, 1.0);
+
+
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  
+
   glutSwapBuffers();
 }
 
-
-void glutMotion(int x, int y) {
-}
-
-void glutMouse(int button, int state, int x, int y) {
-
-}
-
-///////////////////////////////////////////////////////////////////////
-// Map the arrow keys to something here
-///////////////////////////////////////////////////////////////////////
-void glutSpecial(int key, int x, int y)
-{
-  switch (key) {
-  case GLUT_KEY_LEFT:
-    break;
-  case GLUT_KEY_RIGHT:
-    break;
-  case GLUT_KEY_UP:
-    break;
-  case GLUT_KEY_DOWN:
-    break;
-  default:
-    break;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////
-// Map the keyboard keys to something here
-///////////////////////////////////////////////////////////////////////
-void glutKeyboard(unsigned char key, int x, int y)
-{
-  switch (key) {
-  case ' ':
-    animate = !animate;
-    break;
-  case 'c':
-    break;
-  case 'o':
-    break;
-  case 'l':
-    break;
-  case 'r': 
-    break;
-  case 'q':
-    exit(0);
-    break;
-  default:
-    break;
-  }
-}
 
 ///////////////////////////////////////////////////////////////////////
 // animate and display new result
@@ -115,13 +77,14 @@ int glvuWindow()
   glViewport(0, 0, (GLsizei)xScreenRes, (GLsizei)yScreenRes);
   glClearColor(0.0, 0.0, 0.0, 0);
 
-  // register all the callbacks
+  // register all the callbacks 
+  //(commented out input callbacks to give ImGui control)
   glutDisplayFunc(&glutDisplay);
   glutIdleFunc(&glutIdle); 
-  glutKeyboardFunc(&glutKeyboard);
-  glutSpecialFunc(&glutSpecial);  
-  glutMotionFunc(&glutMotion);
-  glutMouseFunc(&glutMouse);
+  // glutKeyboardFunc(&glutKeyboard);
+  // glutSpecialFunc(&glutSpecial);  
+  // glutMotionFunc(&glutMotion);
+  // glutMouseFunc(&glutMouse);
 
   // enter the infinite GL loop
   glutMainLoop();
@@ -143,10 +106,10 @@ int main(int argc, char **argv)
 }
 
 void runEverytime()       
-{          
-  
+{      
+
   glClearColor(0.0, 1.0, 0.0, 0);
- 
+
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -155,6 +118,14 @@ void runEverytime()
 ///////////////////////////////////////////////////////////////////////
 void runOnce()
 {
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+  // initialize ImGui
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO(); 
+  (void)io;
+  ImGui::StyleColorsDark();
+  ImGui_ImplGLUT_Init();
+  ImGui_ImplGLUT_InstallFuncs();
+  ImGui_ImplOpenGL3_Init("#version 430 core");
 }
   

@@ -1,6 +1,6 @@
 # Common flags
 LDFLAGS_COMMON = -lGLEW -lGL -lGLU -lglut -lstdc++
-CFLAGS_COMMON  = -c -Wall -I./ -O3 -DGL_SILENCE_DEPRECATION
+CFLAGS_COMMON  = -c -Wall -I./ -I./imgui -I./imgui/backends -O3 -DGL_SILENCE_DEPRECATION
 
 # Compiler
 CC      = g++
@@ -8,29 +8,31 @@ CFLAGS  = ${CFLAGS_COMMON}
 LDFLAGS = ${LDFLAGS_COMMON}
 
 # Executable names
-LINREG_EXE   = ./bin/linReg
-# LOGREG_EXE   = ./bin/logReg
-EXECUTABLES  = $(LINREG_EXE) $(LOGREG_EXE)
+EXECUTABLE   = ./bin/cppredict
 
 # Source files
-LINREG_SOURCES = main.cpp
+SOURCES = \
+  main.cpp \
+  imgui/imgui.cpp \
+  imgui/imgui_draw.cpp \
+  imgui/imgui_tables.cpp \
+  imgui/imgui_widgets.cpp \
+  imgui/imgui_demo.cpp \
+  imgui/backends/imgui_impl_opengl3.cpp \
+  imgui/backends/imgui_impl_glut.cpp
 
-OBJECTS = $(LINREG_SOURCES:.cpp=.o)
+OBJECTS = $(SOURCES:.cpp=.o)
 
 # Default target
-all: $(EXECUTABLES)
+all: $(EXECUTABLE)
 
 # Build rules
-$(LINREG_EXE): $(OBJECTS)
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-# $(EXECUTABLE_3): $(OBJECTS_3D)
-# 	$(CC) $(OBJECTS_3D) $(LDFLAGS) -o $@
-
-# Generic rule for .cpp -> .o
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 # Clean rule
 clean:
-	rm -f *.o $(EXECUTABLES)
+	rm -f *.o $(EXECUTABLE)
